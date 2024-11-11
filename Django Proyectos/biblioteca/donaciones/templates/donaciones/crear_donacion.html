@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block title %}Crear Donación{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1>Crear Donación</h1>
+        <form action="{% url 'crear_donacion' %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div>
+                <label for="tipo_donacion">Tipo de Donación:</label>
+                <select name="tipo_donacion" id="tipo_donacion" required>
+                    <option value="imagen">Imagen</option>
+                    <option value="video">Video</option>
+                    <option value="documento">Documento</option>
+                    <option value="audio">Audio</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="descripcion">Descripción:</label>
+                <textarea name="descripcion" id="descripcion" rows="4" required></textarea>
+            </div>
+
+            <div>
+                <label for="archivo">Archivo:</label>
+                <input type="file" name="archivo" id="archivo" accept="image/*,video/*,.pdf,.doc,.docx,.mp3" required onchange="previewFile()">
+                <div id="preview-container" style="margin-top: 20px;">
+                    <p id="preview-text"></p>
+                    <img id="preview-image" style="display: none; max-width: 200px;">
+                    <video id="preview-video" style="display: none; max-width: 200px;" controls></video>
+                    <audio id="preview-audio" style="display: none;"></audio>
+                </div>
+            </div>
+
+            <button type="submit">Crear Donación</button>
+        </form>
+    </div>
+
+    <script>
+        function previewFile() {
+            const file = document.querySelector('#archivo').files[0];
+            const previewText = document.getElementById('preview-text');
+            const previewImage = document.getElementById('preview-image');
+            const previewVideo = document.getElementById('preview-video');
+            const previewAudio = document.getElementById('preview-audio');
+            const previewContainer = document.getElementById('preview-container');
+
+            // Limpiar preview anterior
+            previewText.innerText = '';
+            previewImage.style.display = 'none';
+            previewVideo.style.display = 'none';
+            previewAudio.style.display = 'none';
+
+            if (file) {
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    const fileType = file.type.split('/')[0];
+                    previewContainer.style.display = 'block';
+
+                    if (fileType === 'image') {
+                        previewImage.style.display = 'block';
+                        previewImage.src = e.target.result;
+                    } else if (fileType === 'video') {
+                        previewVideo.style.display = 'block';
+                        previewVideo.src = e.target.result;
+                    } else if (fileType === 'audio') {
+                        previewAudio.style.display = 'block';
+                        previewAudio.src = e.target.result;
+                    } else {
+                        previewText.innerText = "Vista previa no disponible para este tipo de archivo.";
+                    }
+                };
+
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
+{% endblock %}

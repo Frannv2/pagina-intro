@@ -1,0 +1,122 @@
+/* Reset de márgenes y padding para que todo tenga un inicio limpio */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Estilo básico para el body */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    line-height: 1.6;
+    padding: 20px;
+}
+
+/* Contenedor principal para centrar el contenido */
+.container {
+    width: 80%;
+    margin: 0 auto;
+    max-width: 1200px;
+}
+
+/* Estilo para los encabezados principales */
+h1, h2, h3 {
+    color: #2c3e50;
+    font-family: 'Helvetica', sans-serif;
+    margin-bottom: 15px;
+}
+
+/* Estilo para los enlaces */
+a {
+    text-decoration: none;
+    color: #3498db;
+}
+
+a:hover {
+    color: #2980b9;
+}
+
+/* Estilo para botones */
+button {
+    padding: 10px 15px;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #2980b9;
+}
+
+.unstyled-button {
+    background-color: #333;
+    border: none;
+    color: white;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    font-size: inherit;
+    font-family: inherit;
+    text-decoration: none;
+}
+
+
+/* Estilo para formularios */
+form {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+/* Estilo para los inputs */
+input[type="text"], input[type="email"], input[type="number"], textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Estilo para las tablas */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+}
+
+th {
+    background-color: #3498db;
+    color: #fff;
+}
+
+/* Estilo para los mensajes de error o éxito */
+.alert {
+    padding: 10px;
+    margin: 20px 0;
+    border-radius: 5px;
+}
+
+.alert.success {
+    background-color: #2ecc71;
+    color: white;
+}
+
+.alert.error {
+    background-color: #e74c3c;
+    color: white;
+}

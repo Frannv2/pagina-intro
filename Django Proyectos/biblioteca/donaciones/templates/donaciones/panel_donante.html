@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}Panel de Donante{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1>Panel de Donante</h1>
+        <p>Bienvenido, aquí puedes ver el estado de tus donaciones.</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>  
+                    <th>Tipo de Donación</th>
+                    <th>Descripción</th>
+                    <th>Estado</th>
+                    <th>Fecha</th>
+                    <th>Vista Previa</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for donacion in donaciones %}
+                    <tr>
+                        <td>{{ donacion.id }}</td>  
+                        <td>{{ donacion.tipo_donacion }}</td>
+                        <td>{{ donacion.descripcion }}</td>
+                        <td>
+                            {% if donacion.estado == 'pendiente' %}
+                                Pendiente
+                            {% elif donacion.estado == 'aprobada' %}
+                                Aprobada
+                            {% elif donacion.estado == 'rechazada' %}
+                                Rechazada
+                            {% endif %}
+                        </td>
+                        <td>{{ donacion.fecha }}</td>
+                        <td>
+                            {% if donacion.archivo %}
+                                <a href="{{ donacion.archivo.url }}" target="_blank">Ver Archivo</a>
+                            {% else %}
+                                No disponible
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

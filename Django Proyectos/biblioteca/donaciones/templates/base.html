@@ -1,0 +1,71 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Biblioteca{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        /* Estilos para el menú de navegación */
+        .nav-bar {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Estilos para los enlaces del menú */
+        .nav-link {
+            color: white;
+            margin-right: 15px;
+            text-decoration: none;
+        }
+
+        /* Estilos para el botón de cerrar sesión dentro del formulario */
+        .logout-button {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font: inherit;
+            text-decoration: none;
+            margin-right: 15px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div>
+            <a href="{% url 'inicio' %}" class="nav-link">Inicio</a>
+        </div>
+
+        <div>
+            {% if user.is_authenticated %}
+                {% if user.perfil.rol == 'aprobador' %}
+                    <a href="{% url 'panel_aprobador' %}" style="color: white; margin-right: 15px;">Panel Aprobador</a>
+                {% else %}
+                    <a href="{% url 'crear_donacion' %}" class="nav-link">Crear Donación</a>
+                    <a href="{% url 'panel_donante' %}" class="nav-link">Panel Donante</a>
+                {% endif %}
+                <!-- Formulario de Cerrar sesión estilizado como enlace -->
+                <form action="{% url 'logout' %}" class="nav-bar" method="post" style="display: inline; box-shadow: none;">
+                    {% csrf_token %}
+                    <button type="submit" class="logout-button">Cerrar Sesión</button>
+                </form>
+            {% else %}
+                <!-- Formulario de Inicio sesión estilizado como enlace -->
+                <form action="{% url 'login' %}" class="nav-bar" method="post" style="display: inline; box-shadow: none;">
+                    {% csrf_token %}
+                    <button type="submit" class="logout-button">Inicio Sesión</button>
+                </form>
+            {% endif %}
+        </div>
+    </nav>
+    <div>
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

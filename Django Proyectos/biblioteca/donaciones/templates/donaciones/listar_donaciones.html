@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Lista de Donaciones</h2>
+<ul>
+    {% for donacion in donaciones %}
+        <li>{{ donacion.tipo }} - {{ donacion.estado }}</li>
+    {% endfor %}
+</ul>
+{% endblock %}

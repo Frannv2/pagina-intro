@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block content %}
+<!-- panel_aprobador.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Aprobador</title>
+</head>
+<body>
+    <h1>Donaciones Pendientes</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Usuario</th>
+                <th>Tipo</th>
+                <th>Descripción</th>
+                <th>Estado</th>
+                <th>Fecha</th>
+                <th>Archivo</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for donacion in donaciones %}
+            <tr>
+                <td>{{ donacion.id }}</td>
+                <td>{{ donacion.perfil.usuario.username }}</td>
+                <td>{{ donacion.tipo_donacion }}</td>
+                <td>{{ donacion.descripcion }}</td>
+                <td>{{ donacion.estado }}</td>
+                <td>{{ donacion.fecha }}</td>
+                <td>
+                    {% if donacion.archivo %}
+                        <a href="{{ donacion.archivo.url }}" target="_blank">Ver archivo</a>
+                    {% else %}
+                        No disponible
+                    {% endif %}
+                </td>
+                <td>
+                    <!-- Botones para aprobar o rechazar -->
+                    <form action="{% url 'cambiar_estado_donacion' donacion.id 'aprobada' %}" method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit">Aprobar</button>
+                    </form>
+                    <form action="{% url 'cambiar_estado_donacion' donacion.id 'rechazada' %}" method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit">Rechazar</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
+{% endblock %}
