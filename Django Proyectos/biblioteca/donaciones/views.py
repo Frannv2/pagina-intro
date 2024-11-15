@@ -1,16 +1,14 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from .models import Donacion, Perfil
-from .forms import DonacionForm
-from django.contrib.auth.decorators import login_required, user_passes_test
-from django.contrib import messages
-from django.contrib.auth import login
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 from django.utils import timezone
-from .forms import RegistroDonanteForm, RegistroAprobadorForm, CodigoAccesoForm
+from .models import Donacion, Perfil
+from .forms import DonacionForm, RegistroDonanteForm, RegistroAprobadorForm, CodigoAccesoForm
+from django.contrib.auth import login
 
 def login_view(request):
     if request.user.is_authenticated:
         perfil = request.user.perfil
-        if perfil.rol == 'aprobador':
+        if (perfil.rol == 'aprobador'):
             return redirect('panel_aprobador')
         return redirect('inicio')
 
@@ -51,12 +49,9 @@ def registro_aprobador(request):
             codigo = form.cleaned_data['codigo']
             if codigo == CODIGO_APROBADOR:
                 request.session["codigo_verificado"] = True
-                return redirect("registro_aprobador")
-            else:
-                messages.error(request, "Código de acceso incorrecto.")
+                return redirect('registro_aprobador')
     else:
         form = CodigoAccesoForm()
-
     return render(request, 'donaciones/codigo_acceso.html', {'form': form})
 
 def inicio(request):
@@ -83,7 +78,7 @@ def crear_donacion(request):
 # Vista para listar donaciones (Aprobador)
 @login_required
 def listar_donaciones(request):
-    if not Aprobador.objects.filter(usuario=request.user).exists():
+    if not Perfil.objects.filter(usuario=request.user, rol='aprobador').exists():
         return redirect('inicio')  # Redirige si el usuario no es aprobador
     donaciones = Donacion.objects.all()
     return render(request, 'donaciones/listar_donaciones.html', {'donaciones': donaciones})
@@ -100,17 +95,22 @@ def panel_aprobador(request):
     if perfil.rol != 'aprobador':
         return redirect('inicio')
 
-    # Obtener todas las donaciones pendientes
-    donaciones_pendientes = Donacion.objects.filter(estado='pendiente')
-    return render(request, 'donaciones/panel_aprobador.html', {'donaciones': donaciones_pendientes})
+    estado = request.GET.get('estado', 'todas')
+    if estado == 'todas':
+        donaciones = Donacion.objects.all()
+    else:
+        donaciones = Donacion.objects.filter(estado=estado)
+    
+    return render(request, 'donaciones/panel_aprobador.html', {'donaciones': donaciones})
 
 @login_required
 def cambiar_estado_donacion(request, donacion_id, nuevo_estado):
     perfil = request.user.perfil
     if perfil.rol != 'aprobador':
         return redirect('inicio')
-
-    donacion = get_object_or_404(Donacion, id=donacion_id)
+    
+    donacion = Donacion.objects.get(id=donacion_id)
     donacion.estado = nuevo_estado
     donacion.save()
+    
     return redirect('panel_aprobador')

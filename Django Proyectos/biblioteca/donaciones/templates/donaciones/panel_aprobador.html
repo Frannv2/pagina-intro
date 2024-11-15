@@ -10,6 +10,18 @@
 </head>
 <body>
     <h1>Donaciones Pendientes</h1>
+    
+    <form method="get" action="">
+        <label for="estado">Filtrar por estado:</label>
+        <select name="estado" id="estado">
+            <option value="todas">Todas</option>
+            <option value="pendiente">Pendiente</option>
+            <option value="aprobada">Aprobada</option>
+            <option value="rechazada">Rechazada</option>
+        </select>
+        <button type="submit">Filtrar</button>
+    </form>
+
     <table border="1">
         <thead>
             <tr>
@@ -34,21 +46,16 @@
                 <td>{{ donacion.fecha }}</td>
                 <td>
                     {% if donacion.archivo %}
-                        <a href="{{ donacion.archivo.url }}" target="_blank">Ver archivo</a>
+                    <a href="{{ donacion.archivo.url }}">Ver archivo</a>
                     {% else %}
-                        No disponible
+                    No disponible
                     {% endif %}
                 </td>
                 <td>
-                    <!-- Botones para aprobar o rechazar -->
-                    <form action="{% url 'cambiar_estado_donacion' donacion.id 'aprobada' %}" method="post" style="display:inline;">
-                        {% csrf_token %}
-                        <button type="submit">Aprobar</button>
-                    </form>
-                    <form action="{% url 'cambiar_estado_donacion' donacion.id 'rechazada' %}" method="post" style="display:inline;">
-                        {% csrf_token %}
-                        <button type="submit">Rechazar</button>
-                    </form>
+                    {% if donacion.estado == 'pendiente' %}
+                        <a href="{% url 'cambiar_estado_donacion' donacion.id 'aprobada' %}">Aprobar</a>
+                        <a href="{% url 'cambiar_estado_donacion' donacion.id 'rechazada' %}">Rechazar</a>
+                    {% endif %}
                 </td>
             </tr>
             {% endfor %}
