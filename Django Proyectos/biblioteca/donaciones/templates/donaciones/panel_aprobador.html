@@ -27,7 +27,8 @@
             <tr>
                 <th>ID</th>
                 <th>Usuario</th>
-                <th>Tipo</th>
+                <th>Email</th>
+                <th style="width: 150px;">Tipo</th>
                 <th>Descripción</th>
                 <th>Estado</th>
                 <th>Fecha</th>
@@ -36,26 +37,24 @@
             </tr>
         </thead>
         <tbody>
-            {% for donacion in donaciones %}
+            {% for item in donaciones_info %}
             <tr>
-                <td>{{ donacion.id }}</td>
-                <td>{{ donacion.perfil.usuario.username }}</td>
-                <td>{{ donacion.tipo_donacion }}</td>
-                <td>{{ donacion.descripcion }}</td>
-                <td>{{ donacion.estado }}</td>
-                <td>{{ donacion.fecha }}</td>
+                <td>{{ item.donacion.id }}</td>
+                <td>{{ item.donacion.usuario.username }}</td>
+                <td>{{ item.usuario_email }}</td>
+                <td>{{ item.donacion.tipo_donacion }}</td>
+                <td>{{ item.donacion.descripcion }}</td>
+                <td>{{ item.donacion.estado }}</td>
+                <td>{{ item.donacion.fecha }}</td>
                 <td>
-                    {% if donacion.archivo %}
-                    <a href="{{ donacion.archivo.url }}">Ver archivo</a>
+                    {% if item.donacion.archivo %}
+                    <a href="{{ item.donacion.archivo.url }}" download>ver archivo</a>
                     {% else %}
                     No disponible
                     {% endif %}
                 </td>
                 <td>
-                    {% if donacion.estado == 'pendiente' %}
-                        <a href="{% url 'cambiar_estado_donacion' donacion.id 'aprobada' %}">Aprobar</a>
-                        <a href="{% url 'cambiar_estado_donacion' donacion.id 'rechazada' %}">Rechazar</a>
-                    {% endif %}
+                    <!-- Acciones como cambiar estado, etc. -->
                 </td>
             </tr>
             {% endfor %}

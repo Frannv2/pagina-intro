@@ -101,11 +101,19 @@ def panel_aprobador(request):
     else:
         donaciones = Donacion.objects.filter(estado=estado)
     
-    return render(request, 'donaciones/panel_aprobador.html', {'donaciones': donaciones})
+    # Incluye el correo electrónico del usuario en el contexto
+    donaciones_info = []
+    for donacion in donaciones:
+        donaciones_info.append({
+            'donacion': donacion,
+            'usuario_email': donacion.usuario.email
+        })
+    
+    return render(request, 'donaciones/panel_aprobador.html', {'donaciones_info': donaciones_info})
 
 @login_required
 def cambiar_estado_donacion(request, donacion_id, nuevo_estado):
-    perfil = request.user.perfil
+    perfil = request.user
     if perfil.rol != 'aprobador':
         return redirect('inicio')
     
